@@ -71,41 +71,43 @@ public class MainActivity extends AppCompatActivity {
     public void NumClick(View view)
     {
         int ID=view.getId();
-        int Num=0;
+        //int Num=0;
+        String Num="";
         TextView text=(TextView)findViewById(R.id.textView);
         switch (ID)
         {
             case R.id.Num0:
-                Num=0;break;
+                Num+=0;break;
             case R.id.Num1:
-                Num=1;break;
+                Num+=1;break;
             case R.id.Num2:
-                Num=2;break;
+                Num+=2;break;
             case R.id.Num3:
-                Num=3;break;
+                Num+=3;break;
             case R.id.Num4:
-                Num=4;break;
+                Num+=4;break;
             case R.id.Num5:
-                Num=5;break;
+                Num+=5;break;
             case R.id.Num6:
-                Num=6;break;
+                Num+=6;break;
             case R.id.Num7:
-                Num=7;break;
+                Num+=7;break;
             case R.id.Num8:
-                Num=8;break;
+                Num+=8;break;
             case R.id.Num9:
-                Num=9;break;
+                Num+=9;break;
+            case R.id.Dot:
+                Num+=".";break;
 
 
         }
 
         //normally the calculator has 0 as start number
         if(text.getText().toString().equals("0")) {
-
-            text.setText("" + Num);
+            text.setText(Num);
         }
         else
-            text.setText(text.getText()+""+Num);
+            text.setText(text.getText()+Num);
 
         target=0;
 
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
         while(opList.indexOf('-')!=-1)
         {
-            int mulIndex= opList.indexOf('+');
+            int mulIndex= opList.indexOf('-');
             double returnNum=numList.get(mulIndex)-numList.get(mulIndex+1);
             numList.set(mulIndex,returnNum);
             numList.remove(mulIndex+1);
