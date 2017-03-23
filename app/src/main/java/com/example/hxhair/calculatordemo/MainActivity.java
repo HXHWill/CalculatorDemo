@@ -1,5 +1,7 @@
 package com.example.hxhair.calculatordemo;
 
+import android.content.Context;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static android.R.id.content;
 
 public class MainActivity extends AppCompatActivity {
     int target=0;//record the previous is opeartion or num. 0 is num; 1 is operation
@@ -16,6 +25,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        File path=getApplicationContext().getFilesDir();
+        File file = new File(path,"hxh");
+        int length = (int) file.length();
+
+        byte[] bytes = new byte[length];
+
+
+        try {
+            FileInputStream in = new FileInputStream(file);
+            in.read(bytes);
+            in.close();
+        } catch (Exception e)
+        {}
+        String contents = new String(bytes);
+
+        TextView text=(TextView) findViewById(R.id.textView);
+        text.setText(""+contents);
+
     }
 
     public void resultOpClick(View view)
@@ -25,24 +53,58 @@ public class MainActivity extends AppCompatActivity {
         switch (ID)
         {
             case R.id.clearBt:
-                text.setText("");
+                text.setText("0");
                 break;
             case R.id.Equ:
 
+                dataStore("hxh",text.getText().toString());
+
                 text.setText(""+calcu(text.getText().toString()));
+
+
                 break;
 
         }
 
     }
+
+
+
+    public void dataStore(String fileName,String result)
+    {
+
+        FileOutputStream outputStream;
+
+        try{
+
+            outputStream
+                    = openFileOutput(fileName, Context.MODE_PRIVATE);
+
+            outputStream.write(result.getBytes());
+
+            outputStream.close();
+
+        }
+        catch(Exception
+                e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+
+
+
     public void OpClick(View view)
     {
         //if(target==1)
             //return;
-        int ID=view.getId();
-        String operation="";
+        //String operation="";
+        Button bt=(Button) findViewById(view.getId());
         TextView text=(TextView)findViewById(R.id.textView);
-        switch(ID)
+        /*switch(ID)
         {
             case R.id.Add:
                 operation="+";
@@ -57,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 operation="/";
                 break;
 
-        }
+        }*/
 
         String result = text.getText().toString();
         if (target==1) {
@@ -65,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             result=result.substring(0, result.length()-1);
         }
 
-        text.setText(result+operation);
+        text.setText(result+bt.getText());
         target=1;//the last character is operation
     }
     public void NumClick(View view)
@@ -156,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
             numList.set(mulIndex,returnNum);
             numList.remove(mulIndex+1);
             opList.remove(mulIndex);
+            //you have to check dividing by zero (mulIndex+1)
 
         }
         while(opList.indexOf('+')!=-1)
