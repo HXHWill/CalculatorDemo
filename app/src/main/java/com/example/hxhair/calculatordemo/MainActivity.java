@@ -20,13 +20,15 @@ import static android.R.id.content;
 
 public class MainActivity extends AppCompatActivity {
     int target=0;//record the previous is opeartion or num. 0 is num; 1 is operation
+    int EqulTarget=0;
+    dataOperation dataOp=new dataOperation();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File path=getApplicationContext().getFilesDir();
+        /*File path=getApplicationContext().getFilesDir();
         File file = new File(path,"hxh");
         int length = (int) file.length();
 
@@ -39,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
             in.close();
         } catch (Exception e)
         {}
-        String contents = new String(bytes);
+        String contents = new String(bytes);*/
 
-        TextView text=(TextView) findViewById(R.id.textView);
-        text.setText(""+contents);
+
+
 
     }
 
@@ -53,12 +55,20 @@ public class MainActivity extends AppCompatActivity {
         switch (ID)
         {
             case R.id.clearBt:
-                text.setText("0");
+                //text.setText("0");
+                //text.setText(""+contents);
+                try {
+                    text.setText(""+dataOp.getData(getApplicationContext().getFilesDir().getAbsolutePath()+"/hxh.txt"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.Equ:
 
-                dataStore("hxh",text.getText().toString());
-
+                //dataStore("hxh",text.getText().toString());
+                dataOp.saveData(text.getText().toString(),getApplicationContext().getFilesDir().getAbsolutePath());
                 text.setText(""+calcu(text.getText().toString()));
 
 
@@ -132,11 +142,12 @@ public class MainActivity extends AppCompatActivity {
     }
     public void NumClick(View view)
     {
-        int ID=view.getId();
+        //int ID=view.getId();
         //int Num=0;
-        String Num="";
+        //String Num="";
+        Button bt=(Button) findViewById(view.getId());
         TextView text=(TextView)findViewById(R.id.textView);
-        switch (ID)
+        /*switch (ID)
         {
             case R.id.Num0:
                 Num+=0;break;
@@ -162,14 +173,14 @@ public class MainActivity extends AppCompatActivity {
                 Num+=".";break;
 
 
-        }
+        }*/
 
         //normally the calculator has 0 as start number
-        if(text.getText().toString().equals("0")) {
-            text.setText(Num);
+        if(text.getText().toString().equals("0")&&view.getId()!=R.id.Dot) {
+            text.setText(bt.getText());
         }
         else
-            text.setText(text.getText()+Num);
+            text.setText(text.getText()+""+bt.getText());
 
         target=0;
 
